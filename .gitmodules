@@ -1,3 +1,6 @@
 [submodule "libs/Spreadsheet-XLSX"]
 	path = libs/Spreadsheet-XLSX
 	url = git@github.com:tsuchim/perl-Spreadsheet-XLSX.git
+[submodule "libs/Excel-Writer-XLSX"]
+	path = libs/Excel-Writer-XLSX
+	url = git@github.com:tsuchim/excel-writer-xlsx.git
