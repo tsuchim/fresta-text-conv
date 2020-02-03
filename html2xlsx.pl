@@ -53,10 +53,11 @@ for( my $ch = 0 ; $ch <= 6 ; $ch++ ) {
     my %info;
     my @contents;
 
-    $info{title} = $_->as_text for $tree->findnodes(q{//head/title});
-    $info{header1} = $_->as_text for $tree->findnodes(q{//body//h1});
-    $info{header} = $_->as_text for $tree->findnodes(q{//body//div[@id="header"]});
-    $info{row} = $_->as_text for $tree->findnodes(q{//body//div[@class="row"]});
+    $info{title} = $_ for $tree->findnodes_as_strings(q{//head/title});
+    $info{header1} = $_ for $tree->findnodes_as_strings(q{//body//h1});
+
+    push( @contents, $tree->findnodes_as_strings(q{//body//div[@id="header"]}) );
+    push( @contents, $tree->findnodes_as_strings(q{//body//div[@class="row"]}) );
 
     # Add a worksheet
     my $worksheet = $workbook->add_worksheet($env_dir);
@@ -66,6 +67,11 @@ for( my $ch = 0 ; $ch <= 6 ; $ch++ ) {
       $worksheet->write_string( $row, 0, $key );
       $worksheet->write_string( $row, 1, decode('utf8',$info{$key}) );
       print "$key => $info{$key}\n";
+      $row++;
+    }
+    $row++;
+    foreach my $content ( @contents ) {
+      $worksheet->write_string( $row, 1, decode('utf8',$content) );
       $row++;
     }
   }
