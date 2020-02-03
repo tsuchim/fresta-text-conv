@@ -2,8 +2,13 @@
 
 use lib 'libs/Spreadsheet-XLSX/lib/';
 use strict;
+use warnings;
+use utf8;
 use Encode;
+use File::Slurp;
+use HTML::TreeBuilder;
 use Spreadsheet::XLSX;
+
 
 # Open book file
 my $infile = 'data/chapter-0.xlsx';
