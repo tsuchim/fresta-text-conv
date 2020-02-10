@@ -18,29 +18,29 @@ opendir my $master_dh, $master_dir or die "Can't open directory $master_dir: $!"
 my @text_envs;
 while ( my $env_dir = readdir $master_dh ) {
   my $fulldir = "$master_dir$env_dir";
-  if( $env_dir !~ /^\./ && -d $fulldir ) {
-    print "$fulldir as $env_dir\n";
-    push( @text_envs, $env_dir);
-  }
-}
+  next if( $env_dir =~ /^\./ || ! -d $fulldir );
+  print "$fulldir as $env_dir\n";
 
-# chapter ごとにファイルを作成
-for( my $ch = 0 ; $ch <= 6 ; $ch++ ) {
-  # HTML から必要な情報を読み取ってエクセルにまとめる
-  my $testfile = $master_dir.$text_envs[0]."/ch$ch.html";
-  next unless -f $testfile;
-
-  # Create XLS file
-  my $xlsxfile = "data/xlsx/ch$ch.xlsx";
+  # ディレクトリごとにエクセルファイルを作る
+  my $xlsxfile = "data/xlsx/$env_dir.xlsx";
   print "Open $xlsxfile\n";
   my $workbook = Excel::Writer::XLSX->new($xlsxfile);
   # Set default font
   #my $font_name = ''; # decode("cp932","游ゴシック");
   #workbook->{_formats}->[15]->set_properties(font  => $font_name, size  => 11, align => 'vcenter');
 
+  # chapter ごとにシートを作成
+  my @chapters = ('index');
+  for( my $i = 0 ; $i <= 9 ; $i++ ) {
+    # HTML から必要な情報を読み取ってエクセルにまとめる
+    my $testfile = $master_dir.$env_dir."/ch$i.html";
+    next unless -f $testfile;
+    push( @chapters, "ch$i");
+  }
+
   # Scan all environments
-  foreach my $env_dir ( @text_envs ) {
-    my $infile = $master_dir.$env_dir."/ch$ch.html";
+  foreach my $ch ( @chapters ) {
+    my $infile = $master_dir.$env_dir."/$ch.html";
     unless( -f $infile ) {
       print "Skip $infile, file not found.\n";
       next;
@@ -60,7 +60,7 @@ for( my $ch = 0 ; $ch <= 6 ; $ch++ ) {
     push( @contents, $tree->findnodes_as_strings(q{//body//div[@class="row"]}) );
 
     # Add a worksheet
-    my $worksheet = $workbook->add_worksheet($env_dir);
+    my $worksheet = $workbook->add_worksheet($ch);
 
     my $row = 0;
     foreach my $key ( keys %info ) {
