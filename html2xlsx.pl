@@ -25,9 +25,9 @@ while ( my $env_dir = readdir $master_dh ) {
   my $xlsxfile = "data/xlsx/$env_dir.xlsx";
   print "Open $xlsxfile\n";
   my $workbook = Excel::Writer::XLSX->new($xlsxfile);
-  # Set default font
-  #my $font_name = ''; # decode("cp932","游ゴシック");
-  #workbook->{_formats}->[15]->set_properties(font  => $font_name, size  => 11, align => 'vcenter');
+  # Define Formats
+  my $format_wrap = $workbook->add_format();
+  $format_wrap->set_text_wrap();
 
   # chapter ごとにシートを作成
   my @chapters = ('index');
@@ -53,28 +53,87 @@ while ( my $env_dir = readdir $master_dh ) {
     my %info;
     my @contents;
 
-    $info{title} = $_ for $tree->findnodes_as_strings(q{//head/title});
-    $info{header1} = $_ for $tree->findnodes_as_strings(q{//body//h1});
+    $info{title} = $_ for $tree->findnodes(q{//head/title});
+    $info{header1} = $_ for $tree->findnodes(q{//body//h1});
+    $info{header1} =~ s!>\d\.\s*!>!; # チャプター番号を削る
 
-    push( @contents, $tree->findnodes_as_strings(q{//body//div[@id="header"]}) );
-    push( @contents, $tree->findnodes_as_strings(q{//body//div[@class="row"]}) );
+    push( @contents, $tree->findnodes(q{//body//div[@id="header"]/div[@class="container"]}) );
+    push( @contents, $tree->findnodes(q{//body//div[@class="row"]}) );
 
     # Add a worksheet
     my $worksheet = $workbook->add_worksheet($ch);
+    #SetWidth
+    $worksheet->set_column(1,1,100,$format_wrap);
+    $worksheet->set_column(2,2,20);
 
     my $row = 0;
     foreach my $key ( keys %info ) {
+      my @strs = extract_header_from_node($info{$key});
       $worksheet->write_string( $row, 0, $key );
-      $worksheet->write_string( $row, 1, decode('utf8',$info{$key}) );
-      print "$key => $info{$key}\n";
+      for( my $col=0 ; $col<@strs ; $col++ ) {
+        $worksheet->write_string( $row, $col+1, decode('utf8', $strs  [$col] ) );
+      }
+      print "$key => ".join(',',@strs)."\n";
       $row++;
     }
     $row++;
     foreach my $content ( @contents ) {
-      $worksheet->write_string( $row, 1, decode('utf8',$content) );
+      my @strs = extract_contents_from_node($content);
+      next unless $strs[1]; # コンテンツがない場合は飛ばす
+      for( my $col=0 ; $col<@strs ; $col++ ) {
+        $worksheet->write_string( $row, $col, decode('utf8',$strs[$col]) );
+      }
+      print "$row : ".join(',',@strs)."\n";
       $row++;
     }
   }
   # Close
   $workbook->close();
 }
+
+sub extract_header_from_node {
+  my $node = shift(@_);
+  $_ = $node->as_text;
+  return ($_);
+}
+sub extract_contents_from_node {
+  my $node = shift(@_);
+  my $class = '';
+  $_ = $node->as_XML;
+  my $image = '';
+  # ヘッダーのパターン
+  if( m!<div\s+class="container">(.*?)</div>! ) {
+    $_ = $1;
+    s!<h1.*?</h1>!!;
+  }
+  # ナビパターン
+  if( m!<div[^<>]*id="navsp"! ) {
+    $_ = '';
+  }
+  # 本文と画像のパターン
+  if( m!<div class="row">(.+)</div>! ) {
+    $_ = $1;
+    # 画像を抽出
+    if( s!<div[^<>]+>\s*<img[^<>]+?src="image/([^"]+)"[^<>]*>\s*</div>!!s ) {
+      $image = $1;
+    }
+
+    # 注意パネルケース
+    if( s!<div[^<>]+?class="(panel[^"]+)[^<>]+>(.+)</div>!$2!s ) {
+      $class = $1;
+    }
+
+    # 本文を抽出
+    s!<div[^<>]*>\s*(<p>)\s*\[\d+\]\s*(.+)</div>!$1$2!s unless( $class );
+  }
+
+  # <p>を展開
+  s!<p>(.*?)</p>!$1\n!gism;
+  # 改行を展開
+  s!<[^<>]*br[^<>]*>!<br>\n!gim;
+  # 終了タグで改行
+  s!</(?:ol|ul||li|h\d)[^<>]*>!$&\n!gim;
+  # 値を返す
+  return ($class,$_,$image);
+}
+
