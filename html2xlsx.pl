@@ -59,6 +59,7 @@ while ( my $env_dir = readdir $master_dh ) {
     $info{title} = $_ for $tree->findnodes(q{//head/title});
     $info{header1} = $_ for $tree->findnodes(q{//body//h1});
     $info{description} = $description{$ch} if exists($description{$ch});
+    $info{templete} = ( $ch eq 'index') ? 'index' : 'chapter';  
 
     push( @contents, $tree->findnodes(q{//body//div[@id="header"]/div[@class="container"]}) );
     push( @contents, $tree->findnodes(q{//body//div[@class="row"]}) );
@@ -70,6 +71,7 @@ while ( my $env_dir = readdir $master_dh ) {
     $worksheet->set_column(2,2,20);
 
     my $row = 0;
+    # ヘッダの出力
     foreach my $key ( keys %info ) {
       my @strs = extract_header_from_node(\%info,$key,$ch);
       $worksheet->write_string( $row, 0, $key );
@@ -80,6 +82,7 @@ while ( my $env_dir = readdir $master_dh ) {
       $row++;
     }
     $row++;
+    # コンテンツの出力
     foreach my $content ( @contents ) {
       my @strs = extract_contents_from_node($content);
       next unless $strs[1]; # コンテンツがない場合は飛ばす

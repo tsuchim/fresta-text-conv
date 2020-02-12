@@ -6,20 +6,32 @@ use warnings;
 use utf8;
 use Encode;
 use File::Slurp;
-use HTML::TreeBuilder;
+use HTML::Entities;
+use HTML::Template;
 use Spreadsheet::XLSX;
 
 
 # Open book file
-my $infile = 'data/chapter-0.xlsx';
-my $oBook = Spreadsheet::XLSX->new($infile);
+my $infile = 'data/xlsx/win10.xlsx';
+my $excel = Spreadsheet::XLSX->new($infile);
  
 # show book info
-print "Filename :", $oBook->{File} , "\n";
-print "Sheet Count :", $oBook->{SheetCount} , "\n";
-print "Author:", $oBook->{Author} , "\n";
+print "Filename :", $excel->{File} , "\n";
+print "Sheet Count :", $excel->{SheetCount} , "\n";
+print "Author:", $excel->{Author} , "\n";
  
 # show sheet and cell info
-my $oSheet = $oBook->{Worksheet}[0];
-print "Sheet Name:" , $oSheet->{Name} , "\n";
-print "A1:", $oSheet->{Cells}[0][0]->value, "\n";
+foreach my $sheet (@{$excel -> {Worksheet}}) {
+  printf("Sheet: %s\n", $sheet->{Name});
+  $sheet -> {MaxRow} ||= $sheet -> {MinRow};
+  foreach my $row ($sheet -> {MinRow} .. $sheet -> {MaxRow}) {
+    $sheet -> {MaxCol} ||= $sheet -> {MinCol};
+    foreach my $col ($sheet -> {MinCol} ..  $sheet -> {MaxCol}) {
+      my $cell = $sheet -> {Cells} [$row] [$col];
+      if ($cell) {
+        my $str = decode_entities( $cell->{Val});
+        printf("( %s , %s ) => %s\n", $row, $col, $str);
+      }
+    }
+  } 
+}
