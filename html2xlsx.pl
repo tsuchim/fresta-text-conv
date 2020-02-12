@@ -14,6 +14,9 @@ use Excel::Writer::XLSX;
 my $master_dir = 'data/fresta-text-2019/2019/';
 opendir my $master_dh, $master_dir or die "Can't open directory $master_dir: $!";
 
+# description一覧
+our %description;
+
 # 環境一覧(ディレクトリ一覧)を取得
 my @text_envs;
 while ( my $env_dir = readdir $master_dh ) {
@@ -55,7 +58,7 @@ while ( my $env_dir = readdir $master_dh ) {
 
     $info{title} = $_ for $tree->findnodes(q{//head/title});
     $info{header1} = $_ for $tree->findnodes(q{//body//h1});
-    $info{header1} =~ s!>\d\.\s*!>!; # チャプター番号を削る
+    $info{description} = $description{$ch} if exists($description{$ch});
 
     push( @contents, $tree->findnodes(q{//body//div[@id="header"]/div[@class="container"]}) );
     push( @contents, $tree->findnodes(q{//body//div[@class="row"]}) );
@@ -68,7 +71,7 @@ while ( my $env_dir = readdir $master_dh ) {
 
     my $row = 0;
     foreach my $key ( keys %info ) {
-      my @strs = extract_header_from_node($info{$key});
+      my @strs = extract_header_from_node(\%info,$key,$ch);
       $worksheet->write_string( $row, 0, $key );
       for( my $col=0 ; $col<@strs ; $col++ ) {
         $worksheet->write_string( $row, $col+1, decode('utf8', $strs  [$col] ) );
@@ -92,10 +95,19 @@ while ( my $env_dir = readdir $master_dh ) {
 }
 
 sub extract_header_from_node {
-  my $node = shift(@_);
-  $_ = $node->as_text;
+  my ($info,$key,$ch) = @_;
+
+  # print "REF : ".ref($$info{$key})." , CH : $ch\n";
+  if( ref($$info{$key}) eq 'HTML::Element' ) {
+    $_ = $$info{$key}->as_text;
+  }else{
+    $_ = $$info{$key};
+  }
+  s!>\d\.\s*!>! if( $key eq 'header1' ); # チャプター番号を削る
+
   return ($_);
 }
+
 sub extract_contents_from_node {
   my $node = shift(@_);
   my $class = '';
@@ -127,13 +139,23 @@ sub extract_contents_from_node {
     s!<div[^<>]*>\s*(<p>)\s*\[\d+\]\s*(.+)</div>!$1$2!s unless( $class );
   }
 
-  # <p>を展開
-  s!<p>(.*?)</p>!$1\n!gism;
-  # 改行を展開
-  s!<[^<>]*br[^<>]*>!<br>\n!gim;
-  # 終了タグで改行
-  s!</(?:ol|ul||li|h\d)[^<>]*>!$&\n!gim;
-  # 値を返す
+  # 目次
+  while( s!<li>\s*<a\s+href="(\w+)\.html"\s*>\s*<em>([^<>]+)</em>\s*</a>\s*(?:<br[^<>]*>)?\s*([^<>]+?)</li>!!s ) {
+    our %description;
+    $description{$1} = $3;
+    print "DESC $1 => $3\n";
+  }
+  s!<ol\s+start="\d"\s*>\s*</ol>!!s;
+
+  if( $_ ) {
+    # <p>を展開
+    s!<p>(.*?)</p>!$1\n!gism;
+    # 改行を展開
+    s!<[^<>]*br[^<>]*>!<br>\n!gim;
+    # 終了タグで改行
+    s!</(?:ol|ul||li|h\d)[^<>]*>!$&\n!gim;
+    # 値を返す
+  }
   return ($class,$_,$image);
 }
 
