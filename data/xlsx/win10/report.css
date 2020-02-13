@@ -1,0 +1,225 @@
+* {
+ font-family: "游ゴシック", "Yu Gothic", YuGothic, "Hiragino Kaku Gothic ProN", "Hiragino Kaku Gothic Pro", "メイリオ", Meiryo, sans-serif;
+}
+
+div.row {
+   page-break-inside: avoid;
+}
+
+pre, dl, ol, p { line-height:150%; }
+
+dd {margin-left: 10px;}
+
+.q,.q2,.q3{
+	padding: 15px;
+	padding-bottom: 0px;
+	color: black;
+}
+
+.q {
+        background-color: rgba(86,61,124,.15);
+        border: 1px solid rgba(86,61,124,.2);
+
+        background-color: rgba(125,125,125,.15);
+        border: 1px solid rgba(125,125,125,.2);
+}
+
+.q2 {
+        background-color: rgba(86,61,124,.15);
+        border: 1px solid rgba(86,61,124,.2);
+
+        background-color: rgba(125,125,125,.15);
+        border: 1px solid rgba(125,125,125,.2);
+}
+
+img.chart {
+    width: 100%;
+    border:1px solid #666;
+}
+
+img.chartn {
+    width: 100%;
+}
+
+.dropdown {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+blockquote{
+    font-size; small;
+    color: rgb(60,60,60);
+}
+
+p.quote {
+    color: #999;
+    border-left: 4px solid #ccc;
+    padding-left: 10px;
+    margin-left: 15px;
+}
+
+div.condition1 {
+        background-color: rgba(125,125,125,.6);
+        border: rgba(125,125,125,.6);
+	color: white;
+	padding-top:5px;
+	padding-bottom:5px;
+}
+
+
+div.condition2 {
+        background-color: rgba(125,125,125,.8);
+        border: rgba(125,125,125,.8);
+	color: white;
+	padding-top:5px;
+	padding-bottom:5px;
+}
+
+div.c1 {
+    border-left: 2px solid blue;
+}
+
+
+[class*="col-"] {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+
+.note {
+  	border-top: #000 1px dashed;
+	padding: .5em;
+	margin-left: 0em;
+	margin-right: 0em;
+	padding: 1em 1em 1em 1em;
+	background-color: #fff;
+	color: black;
+}
+
+.t {
+  	border-left:   #999999 1px solid;
+	padding: .5em;
+	margin-right: 2em;
+	background-color: #FFFFFF;
+}
+
+p.t a {
+	color: black;
+	font-size: 8pt;
+	text-align: left;
+	text-decoration: none;
+}
+
+p.t a:hover {
+	color: #60f;
+}
+
+.t2{
+	background-color: #51657b;
+	text-align: center;
+	padding: 1em 0em 1em 0em;
+}
+
+td {
+        padding: 1px 15px 1px 0px;
+	vertical-align: top;
+}
+
+.border_tb {
+  	border-top:    #000000 1px solid;
+  	border-bottom:   #000000 1px solid;
+}	
+
+.border_b {
+  	border-bottom:   #000000 1px solid;
+}	
+
+
+.group {
+	border-top: 2px solid #669;
+	border-left: 2px solid #669;
+	margin-left: 2em;
+}
+
+.groupdesc {
+	margin: 0px;
+	padding: 5px;
+	background-color: #669;
+	color: #fff;
+}
+
+.thankyou {
+	color: #66f;
+	font-size: 15pt;
+}
+
+.mikaitou {
+	color: #666;
+	text-decoration: italic;
+}
+
+em {
+	color: #f00;
+	font-weight: bold;
+	font-style: normal;
+}
+
+
+li em {
+	color: #069;
+	font-weight: bold;
+	font-style: normal;
+}
+
+
+dl {
+/*    border: 1px solid #ccc;*/
+    padding: 15px;
+
+}
+
+div#header {
+    background-color: #ddd;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #aaa;
+}
+
+div#footer {
+    text-align:center;
+    padding-top:30px;
+    padding-bottom:30px;
+}
+
+div#navsp {
+    text-align:center;
+}
+
+div#footer div.nav{
+    display: inline-block;
+    border: 1px solid #000;
+    padding: 10px;
+    font-size: large;
+}
+
+.spl {
+    font-size: small;
+    padding-left: 20px;
+}
+
+h2 {
+    border-left: 15px solid #069;
+    padding-left: 10px;
+}
+
+span.check {
+    white-space: nowrap;
+    background-color: #ff6633;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: x-small;
+    padding: 4px;
+    border-radius: 4px;/* CSS3草案 */
+    -webkit-border-radius: 4px;/* Safari,Google Chrome用 */
+    -moz-border-radius: 4px;/* Firefox用 */
+    border: 1px solid #ff6633;
+}
