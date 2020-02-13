@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>FRESTA-TEXT-2019 Mac chap.4</title>
+
+    <!-- Bootstrap -->
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <link rel=stylesheet type="text/css" href="report.css">
+    <link rel=stylesheet type="text/css" href="2018.css">
+  </head>
+  <body>
+    <div id="header">
+      <div class="container">
+
+      <h1>4.自動アップデートとソフトウェアのセットアップ</h1>
+
+          <p>OS と Officeがつねに最新版で使えるように設定します。またウィルス対策ソフトも自動アップデートで最新のウィルス防御機能を維持できるようにしておきます。</p>
+	  <p>また、Officeのライセンス認証もしておきましょう。</p>
+
+          <ul>
+            <li><a href="#windows_update">自動アップデートの設定</a></li>
+            <li><a href="#eset">ESET EAの手動更新とフルスキャン</a></li>
+            <li><a href="#office">Officeのアクティベーション</a></li>
+          </ul>
+
+      </div>
+      <div id="navsp" class="container">
+	<a class="btn btn-primary btn-xs" role="button" href="ch3.html" style="width:35%">&laquo; 前の章へ</a>
+	<a class="btn btn-primary btn-xs" role="button" href="index.html" style="width:20%">目次</a>
+	<a class="btn btn-primary btn-xs" role="button" href="ch5.html" style="width:35%">次の章へ &raquo;</a>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <!-- ====================================================================== -->
+
+      <div class="row">
+	<h2><a name="windows_update"></a>自動アップデートの設定</h2>
+        <div class="col-sm-4 col-md-6">
+[1]画面下にいろんなアイコンが並んでいますね。ここのことを「Dock」と言います。</p>
+Dockの中から、歯車のアイコン「システム環境設定」を選んでクリックしてください
+        </div>
+        <div class="col-sm-8 col-md-6">
+   	  <img src="image/mac-4-01.svg" class="chart" alt="*screenshot*" />
+        </div>
+      </div>
+
+      <!-- ====================================================================== -->
+
+      <div class="row">
+        <div class="col-sm-4 col-md-6">
+[2] いろんな設定をするためのアイコンが並んでいます。</p>
+「ソフトウェア・アップデート」をクリックしてください。
+        </div>
+        <div class="col-sm-8 col-md-6">
+   	  <img src="image/mac-4-02.svg" class="chartn" alt="*screenshot*" />
+        </div>
+      </div>
+
+      <!-- ====================================================================== -->
+
+      <div class="row">
+        <div class="col-sm-4 col-md-6">
+[3] 「Macを自動的に最新の状態に保つ」のところにチェックが入っていることを確認してください。入ってなければ入れてください。 <span class="check">check-5<span>
+        </div>
+        <div class="col-sm-8 col-md-6">
+   	  <img src="image/mac-4-03.svg" class="chartn" alt="*screenshot*" />
+        </div>
+      </div>
+
+      <!-- ====================================================================== -->
+
+      <div class="row">
+	<h2><a name="eset"></a>ESET Endpoint Antivitudの手動更新とフルスキャン</h2>
+        <div class="col-sm-4 col-md-6">
+[4] 次にウイルス対策ソフトの設定を確認しましょう。</p>
+画面右上にある青い「e」のアイコンをクリックしましょう。</p>
+表示されるメニューから「ESET Endpoint Antivirus を開く」をクリックします。
+          <p>
+        </div>
+        <div class="col-sm-8 col-md-6">
+   	  <img src="image/mac-4-04.svg" class="chartn" alt="*screenshot*" />
+        </div>
+      </div>
+
+      <!-- ====================================================================== -->
+
+      <div class="row">
+        <div class="col-sm-4 col-md-6">
+[5}「アップデート」のタブから状態を確認しましょう。</p>
+「更新は必要ありません」となっていたらOKです。<span class="check">check-6,7</span></p>
+最新でない場合は「モジュールのアップロード」をクリックして、アップデートしましょう。</p>
+ウイルス定義データが常に最新でないと、新しいウイルスからパソコンを守ることができません。
+常に最新にしておきましょう。
+        </div>
+        <div class="col-sm-8 col-md-6">
+   	  <img src="image/mac-4-05.svg" class="chartn" alt="*screenshot*" />
+        </div>
+      </div>
+
+      <!-- ====================================================================== -->
+
+      <div class="row">
+        <div class="col-sm-4 col-md-6">
+          <p>[6] システム全体のウイルスチェックを実施する方法を確認します。チェックには時間がかかりますので、講習会の会場では行わないでください。</p>
+          <p>システム全体のウイルスチェックを「フルスキャン」と呼びます。それに対して「スマートスキャン」はよく攻撃される場所に限定して調査を行いますので、時間が短くて済みます。</p>
+          <p>フルスキャンを行うには「コンピュータの検査」タブをクリック、「カスタム検査」をクリックしてください。</p>
+        </div>
+        <div class="col-sm-8 col-md-6">
+   	  <img src="image/mac-4-06.svg" class="chartn" alt="*screenshot*" />
+        </div>
+      </div>
+
+      <!-- ====================================================================== -->
+
+      <div class="row">
+        <div class="col-sm-4 col-md-6">
+          <p>[7] 「検査プロファイル」として「詳細検査」を、「検査対象」として「Macintosh HD」を選んでください。Macintosh HDは、Macに内蔵されている副記憶装置(HDDもしくはSDD）を指します。「検査」をクリックすると、フルスキャンが始まります。<span class="check">check-8<span></p>
+          <p>フルスキャンの実行には時間がかかりますので、講習会会場では実施しないでください。講習会終了後、できるだけ早く実行し、点検届けを完成させてください。</p>
+        </div>
+        <div class="col-sm-8 col-md-6">
+   	  <img src="image/mac-4-07.svg" class="chartn" alt="*screenshot*" />
+        </div>
+      </div>
+
+      <!-- ====================================================================== -->
+
+      <div class="row">
+	<h2><a name="office"></a>Officeのアクティベーション</h2>
+        <div class="col-sm-4 col-md-6">
+[8] 次に、Officeのライセンス認証をします。ソフトウェアが正当なコピーであることを確認し、PCで使えるようにするための処理です。
+Dockの中から、ロケットのアイコンの「Launchpad」をクリックしてください。
+        </div>
+        <div class="col-sm-8 col-md-6">
+   	  <img src="image/mac-4-6.png" class="chart" alt="*screenshot*" />
+        </div>
+      </div>
+
+      <!-- ====================================================================== -->
+
+      <div class="row">
+        <div class="col-sm-4 col-md-6">
+[9]このパソコンに入っているアプリケーションのアイコンがずらっと表示されます。</p>
+この中から、Officeに含まれるアプリを起動しましょう。どれでもよいのですが、ここではMicrosoft Wordを起動します。
+        </div>
+        <div class="col-sm-8 col-md-6">
+   	  <img src="image/mac-4-7.png" class="chart" alt="*screenshot*" />
+        </div>
+      </div>
+
+      <!-- ====================================================================== -->
+
+      <div class="row">
+        <div class="col-sm-4 col-md-6">
+[10]Wordの画面が表示されます。
+一番下の「始めましょう」をクリックしてください。
+        </div>
+        <div class="col-sm-8 col-md-6">
+   	  <img src="image/mac-4-8.png" class="chart" alt="*screenshot*" />
+        </div>
+      </div>
+
+      <!-- ====================================================================== -->
+
+      <div class="row">
+        <div class="col-sm-4 col-md-6">
+[11] 「サインイン」をクリックしてください。
+        </div>
+        <div class="col-sm-8 col-md-6">
+   	  <img src="image/mac-4-9.png" class="chart" alt="*screenshot*" />
+        </div>
+      </div>
+
+      <!-- ====================================================================== -->
+
+      <div class="row">
+        <div class="col-sm-4 col-md-6">
+[12] 「Officeライセンス認証」として、電子メールアドレスを入れるように促されます。広大メールアドレスを入力してください。</p>
+<p class="spl">※広大メールアドレスは「アカウント名@hiroshima-u.ac.jp」です。アカウント名は学生番号の先頭を小文字にしたものです。
+        </div>
+        <div class="col-sm-8 col-md-6">
+   	  <img src="image/mac-4-10.png" class="chart" alt="*screenshot*" />
+        </div>
+      </div>
+
+      <!-- ====================================================================== -->
+
+      <div class="row">
+        <div class="col-sm-4 col-md-6">
+[13] HIROSHIMA UNIVERSITY と書かれたパネルが出ます。先程入力したメールアドレスが出ていることを確認し、パスワードのところに「広大パスワード」を入力してください。入力できたら「サインイン」をクリックします。
+        </div>
+        <div class="col-sm-8 col-md-6">
+   	  <img src="image/mac-4-11.png" class="chart" alt="*screenshot*" />
+        </div>
+      </div>
+
+      <!-- ====================================================================== -->
+
+      <div class="row">
+        <div class="col-sm-4 col-md-6">
+[14] 正しくサインインできると,Officeのテーマを選択する画面になります。
+今はこのまま「続行」をクリックしてください。
+          <p>
+        </div>
+        <div class="col-sm-8 col-md-6">
+   	  <img src="image/mac-4-12.png" class="chart" alt="*screenshot*" />
+        </div>
+      </div>
+
+      <!-- ====================================================================== -->
+
+      <div class="row">
+        <div class="col-sm-4 col-md-6">
+[15] 「今すぐWordを使ってみる」をクリックしてください。
+        </div>
+        <div class="col-sm-8 col-md-6">
+   	  <img src="image/mac-4-13.png" class="chart" alt="*screenshot*" />
+        </div>
+      </div>
+
+      <!-- ====================================================================== -->
+
+      <div class="row">
+        <div class="col-sm-4 col-md-6">
+[16] Wordの新規作成の画面が開きました。</p>
+これで、PowerPointやExcelなどMicrosoft Officeの他のアプリケーションも使えるようになります。<span class="check">check-9</span>
+        </div>
+        <div class="col-sm-8 col-md-6">
+   	  <img src="image/mac-4-14.png" class="chart" alt="*screenshot*" />
+        </div>
+      </div>
+
+      <!-- ====================================================================== -->
+
+      <div class="row">
+        <div class="col-sm-4 col-md-6">
+[17]Officeのアップデートの方法を説明します。</P>
+Officeのソフトのどれでもいいのですが、上のメニューから「ヘルプ」をクリックしてください。</p>
+「更新プログラムのチェック」をクリックしてください。
+        </div>
+        <div class="col-sm-8 col-md-6">
+   	  <img src="image/mac-4-15.png" class="chart" alt="*screenshot*" />
+        </div>
+      </div>
+
+      <!-- ====================================================================== -->
+
+      <div class="row">
+        <div class="col-sm-4 col-md-6">
+[18] アップデートの設定が『自動チェック」であることを確認しましょう。</p>
+次に更新プログラムがあるかを確認します。「更新プログラムをチェック」をクリックしてください。
+        </div>
+        <div class="col-sm-8 col-md-6">
+   	  <img src="image/mac-4-16.png" class="chart" alt="*screenshot*" />
+        </div>
+      </div>
+
+      <!-- ====================================================================== -->
+
+      <div class="row">
+        <div class="col-sm-4 col-md-6">
+[19] 更新プログラムがある場合はこのような表示になります。</p>
+「インストール」をクリックすると、アップデートが始まります。講習会の場ではアップデートをしないようにしてください。
+        </div>
+        <div class="col-sm-8 col-md-6">
+   	  <img src="image/mac-4-17.png" class="chart" alt="*screenshot*" />
+        </div>
+      </div>
+
+      <!-- ====================================================================== -->
+
+      <div class="row">
+        <div class="col-sm-4 col-md-6">
+[20] 更新プログラムがインストールされると、また確認の画面が出ます。メニューの「Microsoft Autoupdateを終了します」をクリックすると、終了できます。
+        </div>
+        <div class="col-sm-8 col-md-6">
+   	  <img src="image/mac-4-18.png" class="chart" alt="*screenshot*" />
+        </div>
+      </div>
+
+
+
+
+    </div>
+
+    <div id="footer" class="container">
+      <a class="btn btn-primary btn-lg" role="button" href="ch3.html" style="width:35%">&laquo; 前の章へ</a>
+      <a class="btn btn-primary btn-lg" role="button" href="index.html" style="width:20%">目次</a>
+      <a class="btn btn-primary btn-lg" role="button" href="ch5.html" style="width:35%">次の章へ &raquo;</a>
+    </div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+  </body>
+</html>

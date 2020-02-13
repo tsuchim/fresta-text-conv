@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title><TMPL_VAR NAME=title></title>
+    <descriptiron><TMPL_VAR NAME=description></descriptiron>
+  
+    <!-- Bootstrap -->
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <link rel=stylesheet type="text/css" href="report.css">
+  </head>
+  <body>
+    <div id="header">
+      <div class="container">
+
+        <h1><TMPL_VAR NAME=header1></h1>
+        <TMPL_VAR NAME=content0>
+
+      </div>
+    </div>
+
+    <div class="container">
+
+      <!-- ====================================================================== -->
+
+      <div class="row">
+        <div class="col-sm-12">
+          <TMPL_VAR NAME=content1>
+
+	        <ol start="<TMPL_VAR NAME=chapter_start>">
+            <TMPL_LOOP NAME=index>
+              <li><a href="<TMPL_VAR NAME=name>.html"><em><TMPL_VAR NAME=title></em></a><br><TMPL_VAR NAME=description></li>
+            </TMPL_LOOP>
+      	  </ol>
+        </div>
+      </div>
+    </div>
+
+    <div id="footer" class="container">
+      <a class="btn btn-primary btn-lg" role="button" href="<TMPL_VAR NAME=chapter_first>.html" style="width:45%">はじめる &raquo;</a>
+    </div>
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+  </body>
+</html>
