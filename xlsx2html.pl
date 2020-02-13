@@ -125,7 +125,7 @@ foreach my $sheet (@{$excel->{Worksheet}}) {
     last unless( $key );
     my $val = decode_entities($sheet->{Cells}[$row][1]->{Val});
     $info{$key} = decode_entities($val);
-    print "INFO: $key = $val\n";
+    # print "INFO: $key = $val\n";
   }
   $info{header1} = sprintf('%u. %s', $ch_num-1, $info{header1}) if exists($info{header1}) && 0 < $ch_num; # add chapter number to header1
 
