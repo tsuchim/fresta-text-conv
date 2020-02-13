@@ -59,7 +59,7 @@ while ( my $env_dir = readdir $master_dh ) {
     $info{title} = $_ for $tree->findnodes(q{//head/title});
     $info{header1} = $_ for $tree->findnodes(q{//body//h1});
     $info{description} = $description{$ch} if exists($description{$ch});
-    $info{templete} = ( $ch eq 'index') ? 'index' : 'chapter';  
+    $info{templete} = $ch if( $ch eq 'index');  
 
     push( @contents, $tree->findnodes(q{//body//div[@id="header"]/div[@class="container"]}) );
     push( @contents, $tree->findnodes(q{//body//div[@class="row"]}) );
@@ -78,7 +78,7 @@ while ( my $env_dir = readdir $master_dh ) {
       for( my $col=0 ; $col<@strs ; $col++ ) {
         $worksheet->write_string( $row, $col+1, decode('utf8', $strs  [$col] ) );
       }
-      print "$key => ".join(',',@strs)."\n";
+      # print "$key => ".join(',',@strs)."\n";
       $row++;
     }
     $row++;
@@ -89,7 +89,7 @@ while ( my $env_dir = readdir $master_dh ) {
       for( my $col=0 ; $col<@strs ; $col++ ) {
         $worksheet->write_string( $row, $col, decode('utf8',$strs[$col]) );
       }
-      print "$row : ".join(',',@strs)."\n";
+      # print "$row : ".join(',',@strs)."\n";
       $row++;
     }
   }
@@ -146,7 +146,7 @@ sub extract_contents_from_node {
   while( s!<li>\s*<a\s+href="(\w+)\.html"\s*>\s*<em>([^<>]+)</em>\s*</a>\s*(?:<br[^<>]*>)?\s*([^<>]+?)</li>!!s ) {
     our %description;
     $description{$1} = $3;
-    print "DESC $1 => $3\n";
+    # print "DESC $1 => $3\n";
   }
   s!<ol\s+start="\d"\s*>\s*</ol>!!s;
 
