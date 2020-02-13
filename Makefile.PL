@@ -8,8 +8,10 @@ WriteMakefile(
     PREREQ_PM         => {
 	    'Archive::Zip' => '1.18',
 	    'Spreadsheet::ParseExcel' => '0.59',
-        'HTML::TreeBuilder::XPath' => '0.14',
-        'Spreadsheet::XLSX' => '0.13.1',
+      'HTML::TreeBuilder::XPath' => '0.14',
+      'Spreadsheet::XLSX' => '0.13.1',
+      'Excel::Writer::XLSX' => '1.03',
+      'HTML::Template' => '2.95',
     }, # e.g., Module::Name => 1.1
     ($] >= 5.005 ?     ## Add these new keywords supported since 5.005
       ( # ABSTRACT_FROM  => 'lib/Spreadsheet/XLSX.pm', # retrieve abstract from module

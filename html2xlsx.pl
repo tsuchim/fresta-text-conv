@@ -106,7 +106,7 @@ sub extract_header_from_node {
   }else{
     $_ = $$info{$key};
   }
-  s!>\d\.\s*!>! if( $key eq 'header1' ); # チャプター番号を削る
+  s!^\d+\.\s*!! if( $key eq 'header1' ); # チャプター番号を削る
 
   return ($_);
 }
@@ -148,7 +148,11 @@ sub extract_contents_from_node {
     $description{$1} = $3;
     # print "DESC $1 => $3\n";
   }
-  s!<ol\s+start="\d"\s*>\s*</ol>!!s;
+
+  if( s!<ol\s+start="\d"\s*>\s*</ol>!!s ) {
+    print "D: $_\n";
+    s!^\s*<div[^<>]+>\s*(.+?)\s*</div>\s*$!$1!sm;
+  }
 
   if( $_ ) {
     # <p>を展開
