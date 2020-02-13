@@ -67,8 +67,9 @@ while ( my $env_dir = readdir $master_dh ) {
     # Add a worksheet
     my $worksheet = $workbook->add_worksheet($ch);
     #SetWidth
+    $worksheet->set_column(0,0, 10,$format_wrap);
     $worksheet->set_column(1,1,100,$format_wrap);
-    $worksheet->set_column(2,2,20);
+    $worksheet->set_column(2,2, 20);
 
     my $row = 0;
     # ヘッダの出力

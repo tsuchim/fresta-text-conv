@@ -5,6 +5,7 @@ use strict;
 use warnings;
 use utf8;
 use Encode;
+use CGI;
 use File::Slurp;
 use HTML::Entities;
 use HTML::Template;
@@ -17,22 +18,37 @@ my $master_dir = '../xlsx';
 my $output_dir = '.';
 
 # print header
+my $cgi = CGI->new;
+my $execute = $cgi->param('execute');
+
 if( $0 =~ /\.cgi$/ ) {
-  print "Content-Type: text/html; charset=utf-8\n\n";
+  print $cgi->header();
   print "<html>";
   print "<head><title>XLSX to HTML updater, Version $VERSION</title></head>";
   print "<body>";
   print "<pre>";
 }
+
+if( @ARGV ){
+  # call from cli
+  $execute = 1; 
+}
+
 print "Convert XLSX to HTML tree.\n";
 
 opendir my $master_dh, $master_dir or die "Can't open directory $master_dir: $!";
 while ( my $file = readdir $master_dh ) {
   my $infile = "$master_dir/$file";
   next if( $infile !~ /\.xlsx/ || ! -f $infile );
-  convert_xlsx_to_html( $file, $master_dir, $output_dir );
+ 
+  if( $execute ) {
+    # convert
+    convert_xlsx_to_html( $file, $master_dir, $output_dir );
+  }else{
+    # just print a list
+    print "$file\n";
+  }
 }
-
 if( $0 =~ /\.cgi$/ ) {
   print "</pre>";
   print "</body>";
@@ -66,6 +82,7 @@ foreach my $sheet (@{$excel->{Worksheet}}) {
   $sheet->{MaxRow} ||= $sheet->{MinRow};
   my $row = $sheet->{MinRow};
   for( ; $row <= $sheet->{MaxRow} ; $row++ ) {
+    last unless exists( $sheet->{Cells}[$row][0]->{Val} );
     my $key = decode_entities($sheet->{Cells}[$row][0]->{Val});
     last unless( $key );
     my $val = decode_entities($sheet->{Cells}[$row][1]->{Val});
@@ -77,7 +94,7 @@ foreach my $i ( sort keys %chapters ) {
   $chapter_start = $i if( $i < $chapter_start ); # the start number of chapter (ch0 exists on some envs)
   $navigation{$ch}{prev} = $chapters{$i-1} if exists($chapters{$i-1});
   $navigation{$ch}{next} = $chapters{$i-1} if exists($chapters{$i+1});
-  $navigation{$ch}{title} = sprintf('%u. %s', $i, $navigation{$ch}{header1} );
+  $navigation{$ch}{title} = $navigation{$ch}{header1};
   push( @index, $navigation{$ch} );
 }
 
@@ -96,6 +113,7 @@ foreach my $sheet (@{$excel->{Worksheet}}) {
   $sheet->{MaxRow} ||= $sheet->{MinRow};
   my $row = $sheet->{MinRow};
   for( ; $row <= $sheet->{MaxRow} ; $row++ ) {
+    last unless exists($sheet->{Cells}[$row][0]->{Val});
     my $key = decode_entities($sheet->{Cells}[$row][0]->{Val});
     last unless( $key );
     my $val = decode_entities($sheet->{Cells}[$row][1]->{Val});
@@ -184,7 +202,7 @@ foreach my $sheet (@{$excel->{Worksheet}}) {
   $outfile .= "/$ch.html";
   print "Output into $outfile\n";
   open(my $output_dh,'>',$outfile);
-  # $template->output(print_to => $output_dh);
+  $template->output(print_to => $output_dh);
   close($output_dh);
 }
 }
