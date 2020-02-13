@@ -12,9 +12,19 @@ use Spreadsheet::XLSX;
 
 our $VERSION = '0.10';
 
-# Open book file
+# Directories
 my $master_dir = '../xlsx';
 my $output_dir = '.';
+
+# print header
+if( $0 =~ /\.cgi$/ ) {
+  print "Content-Type: text/html; charset=utf-8\n\n";
+  print "<html>";
+  print "<head><title>XLSX to HTML updater, Version $VERSION</title></head>";
+  print "<body>";
+  print "<pre>";
+}
+print "Convert XLSX to HTML tree.\n";
 
 opendir my $master_dh, $master_dir or die "Can't open directory $master_dir: $!";
 while ( my $file = readdir $master_dh ) {
@@ -22,6 +32,13 @@ while ( my $file = readdir $master_dh ) {
   next if( $infile !~ /\.xlsx/ || ! -f $infile );
   convert_xlsx_to_html( $file, $master_dir, $output_dir );
 }
+
+if( $0 =~ /\.cgi$/ ) {
+  print "</pre>";
+  print "</body>";
+  print "</html>";
+}
+exit;
 
 sub convert_xlsx_to_html {
   my ($infile, $master_dir, $output_dir ) = @_;
@@ -160,7 +177,11 @@ foreach my $sheet (@{$excel->{Worksheet}}) {
 
   # Output
   my $outfile = "$output_dir/$infile";
-  $outfile =~ s/\.xlsx$/.html/;
+  $outfile =~ s/\.xlsx$//;
+  # create directory unless exists
+  mkdir($outfile) unless -d $outfile;
+  # output html
+  $outfile .= "/$ch.html";
   print "Output into $outfile\n";
   open(my $output_dh,'>',$outfile);
   # $template->output(print_to => $output_dh);
