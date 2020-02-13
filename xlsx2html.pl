@@ -1,11 +1,14 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -l ../../libs/Spreadsheet-XLSX/lib/
 
-use lib '../../libs/Spreadsheet-XLSX/lib/';
+# use lib '../../libs/Spreadsheet-XLSX/lib/';
+use FindBin;
+use lib "$FindBin::Bin/../../libs/Spreadsheet-XLSX/lib";
 use strict;
 use warnings;
 use utf8;
 use Encode;
 use CGI;
+use File::Basename;
 use File::Slurp;
 use HTML::Entities;
 use HTML::Template;
@@ -14,25 +17,29 @@ use Spreadsheet::XLSX;
 our $VERSION = '0.10';
 
 # Directories
-my $master_dir = '../xlsx';
-my $output_dir = '.';
+my $pwd = dirname($0);
+my $master_dir = $pwd.'/../xlsx';
+my $output_dir = $pwd;
 
 # print header
 my $cgi = CGI->new;
 my $execute = $cgi->param('execute');
-
-if( $0 =~ /\.cgi$/ ) {
-  print $cgi->header();
-  print "<html>";
-  print "<head><title>XLSX to HTML updater, Version $VERSION</title></head>";
-  print "<body>";
-  print "<pre>";
-}
-
 if( @ARGV ){
   # call from cli
   $execute = 1; 
 }
+
+if( $0 =~ /\.cgi$/ ) {
+  print $cgi->header( -charset => 'utf-8' );
+  print $cgi->start_html( -lang => 'ja', -encoding => 'utf-8',
+    -title => "XLSX to HTML updater, Version $VERSION" );
+
+  if( ! $execute ) {
+    print "<div><a href='?execute=1'>実行</a></div>";
+  }
+  print "<pre>";
+}
+
 
 print "Convert XLSX to HTML tree.\n";
 
@@ -204,5 +211,8 @@ foreach my $sheet (@{$excel->{Worksheet}}) {
   open(my $output_dh,'>',$outfile);
   $template->output(print_to => $output_dh);
   close($output_dh);
+
+  # Copy files
+  # TBA
 }
 }
