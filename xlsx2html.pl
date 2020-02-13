@@ -93,7 +93,7 @@ foreach my $i ( sort keys %chapters ) {
   my $ch = $chapters{$i};
   $chapter_start = $i if( $i < $chapter_start ); # the start number of chapter (ch0 exists on some envs)
   $navigation{$ch}{prev} = $chapters{$i-1} if exists($chapters{$i-1});
-  $navigation{$ch}{next} = $chapters{$i-1} if exists($chapters{$i+1});
+  $navigation{$ch}{next} = $chapters{$i+1} if exists($chapters{$i+1});
   $navigation{$ch}{title} = $navigation{$ch}{header1};
   push( @index, $navigation{$ch} );
 }
@@ -120,7 +120,7 @@ foreach my $sheet (@{$excel->{Worksheet}}) {
     $info{$key} = decode_entities($val);
     print "INFO: $key = $val\n";
   }
-  $info{header1} = sprintf('%d. %s', $ch_num, $info{header1}) if exists($info{header1}); # add chapter number to header1
+  $info{header1} = sprintf('%u. %s', $ch_num-1, $info{header1}) if exists($info{header1}) && 0 < $ch_num; # add chapter number to header1
 
   # Read Contents from the Sheet
   $row++;
