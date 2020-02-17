@@ -53,7 +53,7 @@ while ( my $env_dir = readdir $master_dh ) {
     $tree->parse($html);
 
     # 固有の値を設定
-    our $default_div_class = ( $ch =~ /^index/ ) ? '' : 'col-sm-4 col-md-6';
+    our $default_div_class = ( $ch =~ /^index/ ) ? 'col-sm-12' : 'col-sm-4 col-md-6';
     our $default_img_class = ( $ch =~ /^index/ ) ? '' : 'chart';
 
     # 必要な情報を配列にストア
@@ -73,13 +73,14 @@ while ( my $env_dir = readdir $master_dh ) {
     # Add a worksheet
     my $worksheet = $workbook->add_worksheet($ch);
     #SetWidth
-    $worksheet->set_column(0,0, 10,$format_wrap);
+    $worksheet->set_column(0,0, 10);
     $worksheet->set_column(1,1,100,$format_wrap);
-    $worksheet->set_column(2,2, 20);
+    $worksheet->set_column(2,2, 10);
+    $worksheet->set_column(3,3, 20);
 
     my $row = 0;
     # ヘッダの出力
-    foreach my $key ( keys %info ) {
+    foreach my $key ( sort keys %info ) {
       my @strs = extract_header_from_node(\%info,$key,$ch);
       $worksheet->write_string( $row, 0, $key );
       for( my $col=0 ; $col<@strs ; $col++ ) {
@@ -93,6 +94,13 @@ while ( my $env_dir = readdir $master_dh ) {
     foreach my $content ( @contents ) {
       my @strs = extract_contents_from_node($content);
       next unless $strs[1]; # コンテンツがない場合は飛ばす
+      # h2 は単独行で抜き出す
+      while( $strs[1] =~ s!\s*<h(\d)>.+?</h\1>\s*!!sm ) {
+        my $s = $&;
+        $s =~ s/[\r\n]+//g;
+        $worksheet->write_string( $row, 1, decode('utf8',$s) );
+        $row++;
+      }
       for( my $col=0 ; $col<@strs ; $col++ ) {
         $worksheet->write_string( $row, $col, decode('utf8',$strs[$col]) );
       }
@@ -140,9 +148,12 @@ sub extract_contents_from_node {
   if( m!<div class="row">(.+)</div>! ) {
     $_ = $1;
     # 画像を抽出
-    if( s!<div[^<>]+>\s*<img[^<>]+?src="image/([^"]+)"[^<>]*class="([^"]+)"[^<>]+>\s*</div>!!s ) {
+    if( s!<div[^<>]+>\s*<img[^<>]+?src="image/([^"]+)"[^<>]*?class="([^"]+)"[^<>]*>\s*</div>!!s ) {
       $image = $1;
       $iclass = $2 if $2 ne $default_img_class;
+    }elsif( s!<div[^<>]+>\s*<img[^<>]+?class="([^"]+)"[^<>]*?src="image/([^"]+)"[^<>]*>\s*</div>!!s ) {
+      $image = $2;
+      $iclass = $1 if $1 ne $default_img_class;
     }
 
     # 注意パネルケース
@@ -151,7 +162,7 @@ sub extract_contents_from_node {
     }
 
     # 本文を抽出
-    s!<div[^<>]*>\s*(<p>)\s*\[\d+\]\s*(.+)</div>!$1$2!s unless( $class );
+    s!(<p>)\s*\[\d+\]\s*(.+)!$1$2!s unless( $class );
   }
 
   # 目次
