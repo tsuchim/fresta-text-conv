@@ -1,10 +1,14 @@
 # fresta-text-conv
 Converter for Fresta-Texts
 
-input : xlsx
+- Clone Program Tree
 
-output : HTML tree
+ $ git clone git@github.com:tsuchim/fresta-text-conv.git
+ or
+ $ git clone https://github.com/tsuchim/fresta-text-conv.git
 
+- Update submodules
+ $ git submodule update
 
 * If you have "Internal Server Error" caused by permission denied on linux with SELinux,
   to set context manually would help you:

@@ -57,8 +57,8 @@ while ( my $env_dir = readdir $master_dh ) {
     our $default_img_class = ( $ch =~ /^index/ ) ? '' : 'chart';
 
     # 必要な情報を配列にストア
-    my %info;
-    my @contents;
+    my %info = ();
+    my @contents = ();
 
     $info{title} = $_ for $tree->findnodes(q{//head/title});
     $info{header1} = $_ for $tree->findnodes(q{//body//h1});

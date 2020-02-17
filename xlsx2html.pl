@@ -15,7 +15,7 @@ use HTML::Template;
 use Spreadsheet::XLSX;
 
 our $VERSION = '0.10';
-
+our $DEBUG = 0;
 # Directories
 my $pwd = dirname($0);
 my $master_dir = $pwd.'/../xlsx';
@@ -33,11 +33,12 @@ if( $0 =~ /\.cgi$/ ) {
   print $cgi->header( -charset => 'utf-8' );
   print $cgi->start_html( -lang => 'ja', -encoding => 'utf-8',
     -title => "XLSX to HTML updater, Version $VERSION" );
+  print "<pre>";
+  print "XLSX to HTML updater, Version $VERSION";
 
   if( ! $execute ) {
-    print "<div><a href='?execute=1'>実行</a></div>";
+    print "<div><span style='border: black 2px solid; padding: 2px 8px;'><a href='?execute=1'>Convert</a></span></div>";
   }
-  print "<pre>";
 }
 
 
@@ -48,15 +49,19 @@ while ( my $file = readdir $master_dh ) {
   my $infile = "$master_dir/$file";
   next if( $infile !~ /\.xlsx/ || ! -f $infile );
  
+  my $dst = $file;
+  $dst =~ s/\.xlsx//;
   if( $execute ) {
     # convert
+    print "Convert $file to <a href='$dst/index.html'>$dst</a>";
     convert_xlsx_to_html( $file, $master_dir, $output_dir );
   }else{
     # just print a list
-    print "$file\n";
+    print "$file will convert into <a href='$dst'>$dst</a>\n";
   }
 }
 if( $0 =~ /\.cgi$/ ) {
+  print "done. <a href='?'>Return</a>";
   print "</pre>";
   print "</body>";
   print "</html>";
@@ -65,6 +70,19 @@ exit;
 
 sub convert_xlsx_to_html {
   my ($infile, $master_dir, $output_dir ) = @_;
+  our $DEBUG;
+
+  # source directories for files copying.
+  my @src_dirs;
+
+  my $outdir = "$output_dir/$infile";
+  $outdir =~ s/\.xlsx$//;
+  # create directory unless exists
+  if( -e $outdir ) {
+    print "Remove exist directory: $outdir" if $DEBUG;
+    system ('rm','-rf',$outdir);
+  }
+  mkdir($outdir) unless -d $outdir;
 
   my $excel = Spreadsheet::XLSX->new("$master_dir/$infile");
  
@@ -113,7 +131,7 @@ my $ch_num = $chapter_start - 1;
 foreach my $sheet (@{$excel->{Worksheet}}) {
   my $ch = $sheet->{Name};
   $ch_num++;
-  printf("Sheet: %s\n", $ch);
+  printf("Sheet: %s\n", $ch) if $DEBUG;
 
   # Read Information from a Header of the Sheet
   my %info;
@@ -183,7 +201,7 @@ foreach my $sheet (@{$excel->{Worksheet}}) {
       $tmplname = $1;
     }
   }
-  print "Open $tmplname.tmpl as HTML Template.\n";
+  print "Open $tmplname.tmpl as HTML Template." if $DEBUG;
   my $template = HTML::Template->new(filename=>"$master_dir/$tmplname.tmpl", die_on_bad_params=>0 );
   die("template cannot open : $tmplname.tmpl") unless $template;
 
@@ -213,31 +231,27 @@ foreach my $sheet (@{$excel->{Worksheet}}) {
   }
 
   # Output
-  my @src_dirs;
-  push(@src_dirs,$info{template}) if $info{template};
+  push(@src_dirs,$info{template}) if( $info{template} && ! grep {$_ eq $info{template} } @src_dirs );
 
-  my $outdir = "$output_dir/$infile";
-  $outdir =~ s/\.xlsx$//;
-  # create directory unless exists
-  if( -e $outdir ) {
-    print "Remove exist directory: $outdir";
-    system ('rm','-rf',$outdir);
-  }
-  mkdir($outdir) unless -d $outdir;
-  push(@src_dirs, $outdir);
   # output html
   my $outfile = "$outdir/$ch.html";
-  print "Output into $outfile\n";
+  print "Output into $outfile" if $DEBUG;
   open(my $output_dh,'>',$outfile);
   $template->output(print_to => $output_dh);
   close($output_dh);
 
+  }
+
   # Copy files
+  my $srcdir = $infile;
+  $srcdir =~ s/\.xlsx$//;
+  push(@src_dirs, $srcdir) if -d $srcdir;
+
   foreach my $dir ( @src_dirs ) {
     my $src = "$master_dir/$dir";
     my $dst = $outdir;
-    print "Copy files from $src to $dst\n";
-    system ('cp','-au',"$src/*","$dst");
+    next unless -d $src;
+    print "Copy files from $src to $dst\n" if $DEBUG;
+    system "cp -au $src/* $dst/";
   }
-}
 }
