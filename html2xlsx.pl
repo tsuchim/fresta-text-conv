@@ -14,15 +14,20 @@ use Excel::Writer::XLSX;
 my $master_dir = 'data/fresta-text-2019/2019/';
 opendir my $master_dh, $master_dir or die "Can't open directory $master_dir: $!";
 
-# description一覧
-our %description;
-
 # 環境一覧(ディレクトリ一覧)を取得
 my @text_envs;
 while ( my $env_dir = readdir $master_dh ) {
+  convert_html_to_xlsx( $master_dir,$env_dir);
+}
+
+sub convert_html_to_xlsx {
+  my ($master_dir,$env_dir) = @_;
   my $fulldir = "$master_dir$env_dir";
-  next if( $env_dir =~ /^\./ || ! -d $fulldir );
+  return if( $env_dir =~ /^\./ || ! -d $fulldir );
   print "$fulldir as $env_dir\n";
+
+  # description一覧
+  our %description = ();
 
   # ディレクトリごとにエクセルファイルを作る
   my $xlsxfile = "data/xlsx/$env_dir.xlsx";
