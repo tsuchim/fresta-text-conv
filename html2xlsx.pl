@@ -52,6 +52,10 @@ while ( my $env_dir = readdir $master_dh ) {
     my $tree = HTML::TreeBuilder::XPath->new;
     $tree->parse($html);
 
+    # 固有の値を設定
+    our $default_div_class = ( $ch =~ /^index/ ) ? '' : 'col-sm-4 col-md-6';
+    our $default_img_class = ( $ch =~ /^index/ ) ? '' : 'chart';
+
     # 必要な情報を配列にストア
     my %info;
     my @contents;
@@ -59,7 +63,9 @@ while ( my $env_dir = readdir $master_dh ) {
     $info{title} = $_ for $tree->findnodes(q{//head/title});
     $info{header1} = $_ for $tree->findnodes(q{//body//h1});
     $info{description} = $description{$ch} if exists($description{$ch});
-    $info{templete} = $ch if( $ch eq 'index');  
+    $info{templete} = $ch if( $ch eq 'index');
+    $info{div_class} = $default_div_class if $default_div_class;  
+    $info{img_class} = $default_img_class if $default_img_class;  
 
     push( @contents, $tree->findnodes(q{//body//div[@id="header"]/div[@class="container"]}) );
     push( @contents, $tree->findnodes(q{//body//div[@class="row"]}) );
@@ -117,6 +123,10 @@ sub extract_contents_from_node {
   my $class = '';
   $_ = $node->as_XML;
   my $image = '';
+  my $iclass = '';
+  our $default_div_class;
+  our $default_img_class;
+
   # ヘッダーのパターン
   if( m!<div\s+class="container">(.*?)</div>! ) {
     $_ = $1;
@@ -130,13 +140,14 @@ sub extract_contents_from_node {
   if( m!<div class="row">(.+)</div>! ) {
     $_ = $1;
     # 画像を抽出
-    if( s!<div[^<>]+>\s*<img[^<>]+?src="image/([^"]+)"[^<>]*>\s*</div>!!s ) {
+    if( s!<div[^<>]+>\s*<img[^<>]+?src="image/([^"]+)"[^<>]*class="([^"]+)"[^<>]+>\s*</div>!!s ) {
       $image = $1;
+      $iclass = $2 if $2 ne $default_img_class;
     }
 
     # 注意パネルケース
-    if( s!<div[^<>]+?class="(panel[^"]+)[^<>]+>(.+)</div>!$2!s ) {
-      $class = $1;
+    if( s!<div[^<>]+?class="([^"]+)[^<>]+>(.+)</div>!$2!s ) {
+      $class = $1 if $1 ne $default_div_class;
     }
 
     # 本文を抽出
@@ -151,7 +162,7 @@ sub extract_contents_from_node {
   }
 
   if( s!<ol\s+start="\d"\s*>\s*</ol>!!s ) {
-    print "D: $_\n";
+    # print "D: $_\n";
     s!^\s*<div[^<>]+>\s*(.+?)\s*</div>\s*$!$1!sm;
   }
 
@@ -164,6 +175,6 @@ sub extract_contents_from_node {
     s!</(?:ol|ul||li|h\d)[^<>]*>!$&\n!gim;
     # 値を返す
   }
-  return ($class,$_,$image);
+  return ($class,$_,$iclass,$image);
 }
 
