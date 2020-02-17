@@ -63,7 +63,7 @@ while ( my $env_dir = readdir $master_dh ) {
     $info{title} = $_ for $tree->findnodes(q{//head/title});
     $info{header1} = $_ for $tree->findnodes(q{//body//h1});
     $info{description} = $description{$ch} if exists($description{$ch});
-    $info{templete} = ( $ch eq 'index') ? $ch : 'fresta';
+    $info{template} = ( $ch eq 'index') ? $ch : 'fresta';
     # $info{div_class} = $default_div_class if $default_div_class;  
     # $info{img_class} = $default_img_class if $default_img_class;  
 

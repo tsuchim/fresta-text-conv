@@ -158,7 +158,7 @@ foreach my $sheet (@{$excel->{Worksheet}}) {
                 $l = sprintf('[%u] ', $row_num++ ) . $l;
                 $was_add_number++;
               }
-              print "D: l=$l, row_num=$row_num, was_add_number=$was_add_number\n";
+              # print "D: l=$l, row_num=$row_num, was_add_number=$was_add_number\n";
               $l = '<p>'.$l.'</p>' unless $l =~ m!^\s*<!; # wrap <p> tag unless the line is wrapped by any tag manually
               push( @out, $l);
             }else{
@@ -175,8 +175,8 @@ foreach my $sheet (@{$excel->{Worksheet}}) {
     push( @contents, \%rowdata);
   }
 
-  # Outout HTML using Templete
-  my $tmplname = exists($info{templete}) ? $info{templete} : '';
+  # Outout HTML using template
+  my $tmplname = exists($info{template}) ? $info{template} : '';
   unless( $tmplname ) {
     $tmplname = $infile;
     if( $tmplname =~ m!([^/]+)\.xlsx?$! ) {
@@ -185,7 +185,7 @@ foreach my $sheet (@{$excel->{Worksheet}}) {
   }
   print "Open $tmplname.tmpl as HTML Template.\n";
   my $template = HTML::Template->new(filename=>"$master_dir/$tmplname.tmpl", die_on_bad_params=>0 );
-  die("Templete cannot open : $tmplname.tmpl") unless $template;
+  die("template cannot open : $tmplname.tmpl") unless $template;
 
   # Set parameters
   foreach my $key ( keys %info ) {
@@ -213,18 +213,31 @@ foreach my $sheet (@{$excel->{Worksheet}}) {
   }
 
   # Output
-  my $outfile = "$output_dir/$infile";
-  $outfile =~ s/\.xlsx$//;
+  my @src_dirs;
+  push(@src_dirs,$info{template}) if $info{template};
+
+  my $outdir = "$output_dir/$infile";
+  $outdir =~ s/\.xlsx$//;
   # create directory unless exists
-  mkdir($outfile) unless -d $outfile;
+  if( -e $outdir ) {
+    print "Remove exist directory: $outdir";
+    system ('rm','-rf',$outdir);
+  }
+  mkdir($outdir) unless -d $outdir;
+  push(@src_dirs, $outdir);
   # output html
-  $outfile .= "/$ch.html";
+  my $outfile = "$outdir/$ch.html";
   print "Output into $outfile\n";
   open(my $output_dh,'>',$outfile);
   $template->output(print_to => $output_dh);
   close($output_dh);
 
   # Copy files
-  # TBA
+  foreach my $dir ( @src_dirs ) {
+    my $src = "$master_dir/$dir";
+    my $dst = $outdir;
+    print "Copy files from $src to $dst\n";
+    system ('cp','-au',"$src/*","$dst");
+  }
 }
 }
