@@ -63,9 +63,9 @@ while ( my $env_dir = readdir $master_dh ) {
     $info{title} = $_ for $tree->findnodes(q{//head/title});
     $info{header1} = $_ for $tree->findnodes(q{//body//h1});
     $info{description} = $description{$ch} if exists($description{$ch});
-    $info{templete} = $ch if( $ch eq 'index');
-    $info{div_class} = $default_div_class if $default_div_class;  
-    $info{img_class} = $default_img_class if $default_img_class;  
+    $info{templete} = ( $ch eq 'index') ? $ch : 'fresta';
+    # $info{div_class} = $default_div_class if $default_div_class;  
+    # $info{img_class} = $default_img_class if $default_img_class;  
 
     push( @contents, $tree->findnodes(q{//body//div[@id="header"]/div[@class="container"]}) );
     push( @contents, $tree->findnodes(q{//body//div[@class="row"]}) );
@@ -91,21 +91,25 @@ while ( my $env_dir = readdir $master_dh ) {
     }
     $row++;
     # コンテンツの出力
+    my $content_row = 0;
     foreach my $content ( @contents ) {
       my @strs = extract_contents_from_node($content);
       next unless $strs[1]; # コンテンツがない場合は飛ばす
-      # h2 は単独行で抜き出す
-      while( $strs[1] =~ s!\s*<h(\d)>.+?</h\1>\s*!!sm ) {
-        my $s = $&;
-        $s =~ s/[\r\n]+//g;
-        $worksheet->write_string( $row, 1, decode('utf8',$s) );
-        $row++;
+      if( $content_row ) {
+        while( $strs[1] =~ s!\s*<h(\d)>.+?</h\1>\s*!!sm ) {
+          my $s = $&;
+          $s =~ s/[\r\n]+//g;
+          $worksheet->write_string( $row, 1, decode('utf8',$s) );
+          $row++;
+        }
       }
+      # h2 は単独行で抜き出す
       for( my $col=0 ; $col<@strs ; $col++ ) {
         $worksheet->write_string( $row, $col, decode('utf8',$strs[$col]) );
       }
       # print "$row : ".join(',',@strs)."\n";
       $row++;
+      $content_row++;
     }
   }
   # Close

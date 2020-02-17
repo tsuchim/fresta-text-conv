@@ -80,8 +80,9 @@ my %navigation; # lists of infomation for navigation and index for
 my @index; # lists of chapters for index
 foreach my $sheet (@{$excel->{Worksheet}}) {
   my $ch = $sheet->{Name};
-  next unless( $ch =~ /\d+$/ );
-  my $i = $&;
+  chomp($ch);
+  next unless( $ch =~ /(\d+)$/ );
+  my $i = $1;
   $chapters{$i} = $ch;
   $navigation{$ch}{name} = $ch;
   
@@ -91,8 +92,10 @@ foreach my $sheet (@{$excel->{Worksheet}}) {
   for( ; $row <= $sheet->{MaxRow} ; $row++ ) {
     last unless exists( $sheet->{Cells}[$row][0]->{Val} );
     my $key = decode_entities($sheet->{Cells}[$row][0]->{Val});
+    chomp($key);
     last unless( $key );
     my $val = decode_entities($sheet->{Cells}[$row][1]->{Val});
+    chomp($val);
     $navigation{$ch}{$key} = $val;
   }
 }
@@ -141,17 +144,22 @@ foreach my $sheet (@{$excel->{Worksheet}}) {
       if ($cell) {
         my $str = decode_entities( $cell->{Val});
         # printf("( %s , %s ) => %s\n", $row, $col, $str);
-        my $key = 'class';
-        $key = sprintf('col%u',$col) if( $col );
+        my $key = sprintf('col%u',$col);
+
         # sanitize contents
         if( $col == 1 ) {
           my @out;
           my @lines = split(/\s*[\r\n]\s*/,$str);
+          my $was_add_number = 0;
           foreach my $l ( @lines ) {
             chomp($l);
-            if( $l ) {
-              $l = sprintf('[%u] ', $row_num++ ) . $l if( $ch ne 'index' && @contents && ! $rowdata{class} && ! @out );
-              $l = '<p>'.$l.'</p>' unless $l =~ m!^<!; # wrap <p> tag unless the line is wrapped by any tag manually
+            if( $l ) { 
+              if( $ch ne 'index' && @contents && ! $was_add_number && ! $rowdata{col0} && $l !~ /^\s*<h/ ) {
+                $l = sprintf('[%u] ', $row_num++ ) . $l;
+                $was_add_number++;
+              }
+              print "D: l=$l, row_num=$row_num, was_add_number=$was_add_number\n";
+              $l = '<p>'.$l.'</p>' unless $l =~ m!^\s*<!; # wrap <p> tag unless the line is wrapped by any tag manually
               push( @out, $l);
             }else{
               push( @out, '<br>') ;
@@ -159,6 +167,8 @@ foreach my $sheet (@{$excel->{Worksheet}}) {
           }
           $str = join("\n",@out);
         }
+
+        chomp($str);
         $rowdata{$key} = $str;
       }
     }
@@ -184,7 +194,9 @@ foreach my $sheet (@{$excel->{Worksheet}}) {
   foreach my $key ( keys %{$navigation{$ch}} ) {
     $template->param( $key => $navigation{$ch}{$key} ) unless exists( $info{$key} );
   }
-  $template->param( contents0 => shift(@contents) );
+  # The First content
+  my $content0 = shift(@contents);
+  $template->param( content0 => $$content0{col1} );
 
   # Set contents
   if( $sheet->{Name} eq 'index' ) {

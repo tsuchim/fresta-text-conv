@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title><TMPL_VAR NAME=title></title>
-    <meta name="description" content="<TMPL_VAR NAME=description>">
+    <meta name="description" content="<TMPL_VAR description>">
   
     <!-- Bootstrap -->
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -34,9 +34,12 @@
       <!-- ====================================================================== -->
 
       <div class="row">
-        <div class="col-sm-12">
+        <TMPL_IF NAME=col0>
+          <div class="<TMPL_VAR NAME=col0 DEFAULT='col-sm-12'>">
+        <TMPL_ELSE>
+          <div class="col-sm-12">
+        </TMPL_IF>
           <TMPL_VAR NAME=content1>
-
 	        <ol start="<TMPL_VAR NAME=chapter_start>">
             <TMPL_LOOP NAME=index>
               <li><a href="<TMPL_VAR NAME=name>.html"><em><TMPL_VAR NAME=title></em></a><br><TMPL_VAR NAME=description></li>
