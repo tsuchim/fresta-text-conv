@@ -2,7 +2,8 @@
 
 # use lib '../../libs/Spreadsheet-XLSX/lib/';
 use FindBin;
-use lib "$FindBin::Bin/../../libs/Spreadsheet-XLSX/lib";
+#use lib "$FindBin::Bin/../../libs/Spreadsheet-XLSX/lib";
+use lib "/home/www/fresta/fresta-text-conv/libs/Spreadsheet-XLSX/lib";
 use strict;
 use warnings;
 use utf8;
@@ -18,7 +19,8 @@ our $VERSION = '0.10';
 our $DEBUG = 0;
 # Directories
 my $pwd = dirname($0);
-my $master_dir = $pwd.'/../xlsx';
+#my $master_dir = $pwd.'/../xlsx';
+my $master_dir = "/home/www/fresta/textdata/2020";
 my $output_dir = $pwd;
 
 # print header
