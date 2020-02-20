@@ -56,6 +56,7 @@ while ( my $file = readdir $master_dh ) {
   if( $execute ) {
     # convert
     print "Convert $file to <a href='$dst/index.html'>$dst</a>";
+    system("cd $master_dir; git pull");
     convert_xlsx_to_html( $file, $master_dir, $output_dir );
   }else{
     # just print a list
