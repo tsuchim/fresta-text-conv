@@ -1,16 +1,78 @@
-# fresta-text-conv
-Converter for Fresta-Texts
+# Fresta テキストコンバータ
+このコンバータは、一定の制約の下、エクセルファイルを元にHTMLのテキストツリーを生成するPerlスクリプトです。
 
-- Clone Program Tree
+1. コアプログラムを clone
+  > cd /clone_dir/
+  > git clone git@github.com:tsuchim/fresta-text-conv.git
+  または
+  > git clone https://github.com/tsuchim/fresta-text-conv.git
 
- $ git clone git@github.com:tsuchim/fresta-text-conv.git
- or
- $ git clone https://github.com/tsuchim/fresta-text-conv.git
+1. サブモジュールをアップデート
+  > git submodule update
 
-- Update submodules
- $ git submodule update
+1. 入力リポジトリの展開
 
-* If you have "Internal Server Error" caused by permission denied on linux with SELinux,
-  to set context manually would help you:
-  $ chcon -t httpd_sys_script_exec_t /var/www/fresta-text-conv/data/text/update.cgi
-  
+1. 出力ディレクトリの準備
+
+1. 出力用CGIの準備
+  変換をWeb上で行いたい場合には、出力ディレクトリにリンクを貼り、実行権限を設定します。
+  1. .htaccess にアクセス可能なIPアドレスを設定するか、認証の設定をします。
+  2. リンクを貼り、必要に応じてパーミッションやコンテクストを指定します。
+    > ln -s /clone_dir/xlsx2html.pl convert.cgi
+    > chmod 755 /clone_dir/xlsx2html.pl
+    > chcon -t httpd_sys_script_exec_t convert.cgi
+
+# Excel format
+- 入力エクセルファイルは、マスターディレクトリに配置します。
+  図表など、本文に付随する外部ファイルは、
+  エクセルファイルのbasenameと同じ名前のディレクトリを作り
+  その中に配置します。
+  HTMLの生成には、テンプレートファイルが使われます。
+
+- テンプレートエンジンは[HTML::Templete](https://metacpan.org/pod/HTML::Template)を使用しています。
+  スタイルシートなど、テンプレートに付随する外部ファイルは、
+  テンプレートファイルのbasenameと同じ名前のディレクトリを作り
+  その中に配置します。
+
+  使用するテンプレートファイル名はエクセルファイルの中で指定しますが、
+  省略すると、同じ basename に .tmpl をつけたファイルがテンプレートとして採用されます。
+
+- エクセルファイルは、1つのドキュメントツリーにつき1つのファイルを用意します。
+  <a href="doc/excel_sc_1.png"><img src="doc/excel_sc_1.png" alt="エクセルファイル見本" width="200" height="200"></a>
+
+- 複数のページを出力する場合は、対応した数のシートを準備します。
+  最初に見出しのシート「index」を用意し、
+  次に、コンテンツのシート「ch1」を用意します。
+  コンテンツが複数ページある場合は「ch2」「ch3」と順に作ります。
+  連番を「0」からにしたい場合は「ch0」から始めて下さい。
+  最初のシート以外のシート名の番号は順番になっていなくても、連番として振り直されます。
+
+- 各シートは、空白行を挟んで、前半のパラメタ部と、後半のコンテンツ部に分かれます。
+
+- パラメタ部には、A列にパラメタ名、B列にパラメタ値が入ります。
+  - title : ページタイトル。
+  - header1 : H1 タグ。多くの場合 title と同じでしょう。
+  - description : ページの説明。目次に使われる他、メタタグにも使われます。
+  - templete : 出力に使用するテンプレートファイル名。
+    省略すると、エクセルファイルと同じベース名となります。
+
+- コンテンツ部には、コンテンツを羅列します。
+  - コンテンツ部の最初の行は、ヘッダーコンテント(content0)として扱われます。
+    出力はテンプレートに依存します。
+    
+  - 2行目以降は、A列から順に col0, col1 という名前が振られ、
+    ループとして展開されます。
+    それぞれの役割はテンプレートに依存します。
+
+    デフォルトの書式は
+      - A列(col0) : クラス名(省略時はテンプレート内で指定)
+      - B列(col1) : 本文
+      - C列(col2) : 画像クラス名(画像がある場合)
+      - D列(col3) : 画像ファイル名(同上)
+    となります。
+
+    本文(B列)は、改良された角行が p タグで括られます。
+    任意のタグで括りたい場合は、タグを明記して下さい。
+
+    strong 等のタグはそのまま認識されます。
+
