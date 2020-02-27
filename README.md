@@ -1,6 +1,11 @@
 # Fresta テキストコンバータ
 このコンバータは、一定の制約の下、エクセルファイルを元にHTMLのテキストツリーを生成するPerlスクリプトです。
 
+以下のディレクトリを用意します
+- clone_dir : このスクリプトツリーを展開するディレクトリ
+- master_dir : マスター(入力)となるエクセルやテンプレート、画像などを置くディレクトリ
+- output_dir : 生成されたドキュメントツリーを公開するディレクトリ
+
 1. コアプログラムを clone
    > cd /clone_dir/
    > git clone git@github.com:tsuchim/fresta-text-conv.git
@@ -11,12 +16,14 @@
    > git submodule update
 
 1. 入力リポジトリの展開
+   TBA
 
 1. 出力ディレクトリの準備
-
+   TBA
+   
 1. 出力用CGIの準備
    変換をWeb上で行いたい場合には、出力ディレクトリにリンクを貼り、実行権限を設定します。
-   1. .htaccess にアクセス可能なIPアドレスを設定するか、認証の設定をします。
+   1. このままでは誰でも変換を実行出来てしまうので .htaccess にアクセス可能なIPアドレスを設定するか、認証の設定をします。
    2. リンクを貼り、必要に応じてパーミッションやコンテクストを指定します。
       > ln -s /clone_dir/xlsx2html.pl convert.cgi
       > chmod 755 /clone_dir/xlsx2html.pl
@@ -37,7 +44,7 @@
   使用するテンプレートファイル名はエクセルファイルの中で指定しますが、
   省略すると、同じ basename に .tmpl をつけたファイルがテンプレートとして採用されます。
 
-- <a href="doc/excel_sc_1.png"><img src="doc/excel_sc_1.png" alt="エクセルファイル見本" align="left"></a>
+- <a href="doc/excel_sc_1.png"><img src="doc/excel_sc_1.png" alt="エクセルファイル見本" align="right"></a>
   エクセルファイルは、1つのドキュメントツリーにつき1つのファイルを用意します。
 
 - 複数のページを出力する場合は、対応した数のシートを準備します。
