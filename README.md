@@ -2,25 +2,25 @@
 このコンバータは、一定の制約の下、エクセルファイルを元にHTMLのテキストツリーを生成するPerlスクリプトです。
 
 1. コアプログラムを clone
-  > cd /clone_dir/
-  > git clone git@github.com:tsuchim/fresta-text-conv.git
-  または
-  > git clone https://github.com/tsuchim/fresta-text-conv.git
+   > cd /clone_dir/
+   > git clone git@github.com:tsuchim/fresta-text-conv.git
+   または
+   > git clone https://github.com/tsuchim/fresta-text-conv.git
 
 1. サブモジュールをアップデート
-  > git submodule update
+   > git submodule update
 
 1. 入力リポジトリの展開
 
 1. 出力ディレクトリの準備
 
 1. 出力用CGIの準備
-  変換をWeb上で行いたい場合には、出力ディレクトリにリンクを貼り、実行権限を設定します。
-  1. .htaccess にアクセス可能なIPアドレスを設定するか、認証の設定をします。
-  2. リンクを貼り、必要に応じてパーミッションやコンテクストを指定します。
-    > ln -s /clone_dir/xlsx2html.pl convert.cgi
-    > chmod 755 /clone_dir/xlsx2html.pl
-    > chcon -t httpd_sys_script_exec_t convert.cgi
+   変換をWeb上で行いたい場合には、出力ディレクトリにリンクを貼り、実行権限を設定します。
+   1. .htaccess にアクセス可能なIPアドレスを設定するか、認証の設定をします。
+   2. リンクを貼り、必要に応じてパーミッションやコンテクストを指定します。
+      > ln -s /clone_dir/xlsx2html.pl convert.cgi
+      > chmod 755 /clone_dir/xlsx2html.pl
+      > chcon -t httpd_sys_script_exec_t convert.cgi
 
 # Excel format
 - 入力エクセルファイルは、マスターディレクトリに配置します。
