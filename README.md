@@ -6,7 +6,7 @@
 - master_dir : マスター(入力)となるエクセルやテンプレート、画像などを置くディレクトリ
 - output_dir : 生成されたドキュメントツリーを公開するディレクトリ
 また、ソースツリーを用意します
-- master_git : master_dir に含まれるエクセルファイルや画像ファイルなど
+- git@github.com:user/master_git.git : master_dir に含まれるエクセルファイルや画像ファイルなど
 
 1. コアプログラムを clone
    ~~~
@@ -32,7 +32,7 @@
 1. 入力リポジトリの展開
    ~~~
    cd /master_dir/
-   git clone master_git
+   git clone git@github.com:user/master_git.git
    ~~~
 
 1. 出力ディレクトリの準備
@@ -44,9 +44,30 @@
    
 1. 出力用CGIの準備
    変換をWeb上で行いたい場合には、出力ディレクトリにリンクを貼り、実行権限を設定します。
-   1. このままでは誰でも変換を実行出来てしまうので .htaccess にアクセス可能なIPアドレスを設定するか、認証の設定をします。
-   2. リンクを貼り、必要に応じてパーミッションやコンテクストを指定します。
+   1. .htaccess に、SetEnv で MASTER_DIR を定義します。
+   1. もし .htaccess が外から見えてしまう状態なら、アクセスを制限します。
+   1. このままでは誰でも変換を実行出来てしまうので(それでも実害は少ないですが)
+      .htaccess にアクセス可能なIPアドレスを設定するか、認証の設定をします。
+      この例では、アクセスを 192.168.11.22 からに制限します。
+      
+      ### .htaccess
+      > SetEnv MASTER_DIR /var/www/fresta-text-conv/data/xlsx/fresta
+      >
+      > <FilesMatch \.cgi$>
+      >   Sethandler cgi-script
+      >
+      >   order deny,allow
+      >   deny from all
+      >   allow from 192.168.11.22/32
+      > </FilesMatch>
+      > <FilesMatch ^\.>
+      >   order deny,allow
+      >   deny from all
+      > </FilesMatch>
+
+   1. リンクを貼り、必要に応じてパーミッションやコンテクストを指定します。
       ~~~
+      cd /output_dir/
       ln -s /clone_dir/xlsx2html.pl convert.cgi
       chmod 755 /clone_dir/xlsx2html.pl
       chcon -t httpd_sys_script_exec_t convert.cgi
