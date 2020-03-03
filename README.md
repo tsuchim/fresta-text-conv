@@ -51,19 +51,21 @@
       この例では、アクセスを 192.168.11.22 からに制限します。
       
       ### .htaccess
-      > SetEnv MASTER_DIR /var/www/fresta-text-conv/data/xlsx/fresta
-      >
-      > <FilesMatch \.cgi$>
-      >   Sethandler cgi-script
-      >
-      >   order deny,allow
-      >   deny from all
-      >   allow from 192.168.11.22/32
-      > </FilesMatch>
-      > <FilesMatch ^\.>
-      >   order deny,allow
-      >   deny from all
-      > </FilesMatch>
+      ~~~
+      SetEnv MASTER_DIR /var/www/fresta-text-conv/data/xlsx/fresta
+      
+      <FilesMatch \\.cgi$>
+        Sethandler cgi-script
+      
+        order deny,allow
+        deny from all
+        allow from 192.168.11.22/32
+      </FilesMatch>
+      <FilesMatch ^\\.>
+        order deny,allow
+        deny from all
+      </FilesMatch>
+      ~~~
 
    1. リンクを貼り、必要に応じてパーミッションやコンテクストを指定します。
       ~~~
