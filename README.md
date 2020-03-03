@@ -5,6 +5,7 @@
 - clone_dir : このスクリプトツリーを展開するディレクトリ
 - master_dir : マスター(入力)となるエクセルやテンプレート、画像などを置くディレクトリ
 - output_dir : 生成されたドキュメントツリーを公開するディレクトリ
+
 また、ソースツリーを用意します
 - git@github.com:user/master_git.git : master_dir に含まれるエクセルファイルや画像ファイルなど
 
@@ -25,11 +26,12 @@
    make
    cd -
    ~~~
-   libs/Spreadsheet-XLSX/lib/Spreadsheet/XLSX.pm
+   > libs/Spreadsheet-XLSX/lib/Spreadsheet/XLSX.pm
    が作られたことを確認してください。
 
 
 1. 入力リポジトリの展開
+
    /master_dir の親ディレクトリを /master_parent_dir とすると
    ~~~
    cd /master_patent_dir/
@@ -46,6 +48,7 @@
    パーミッションなどは環境によります。わからない場合は管理者に聞いて下さい。
    
 1. 出力用CGIの準備
+
    変換をWeb上で行いたい場合には、出力ディレクトリにリンクを貼り、実行権限を設定します。
    1. .htaccess に、SetEnv で MASTER_DIR を定義します。
    1. もし .htaccess が外から見えてしまう状態なら、アクセスを制限します。
