@@ -2,7 +2,7 @@
 
 # use lib '../../libs/Spreadsheet-XLSX/lib/';
 use FindBin;
-use lib "$FindBin::Bin/../../libs/Spreadsheet-XLSX/lib";
+use lib "$FindBin::RealBin/libs/Spreadsheet-XLSX/lib";
 #use lib "/home/www/fresta/fresta-text-conv/libs/Spreadsheet-XLSX/lib";
 use strict;
 use warnings;
@@ -15,7 +15,7 @@ use HTML::Entities;
 use HTML::Template;
 use Spreadsheet::XLSX;
 
-our $VERSION = '0.10';
+our $VERSION = '1.1.0';
 our $DEBUG = 0;
 # Directories
 my $pwd = dirname($0);
@@ -37,7 +37,7 @@ if( $0 =~ /\.cgi$/ ) {
     -title => "XLSX to HTML updater, Version $VERSION" );
   print "<pre>";
   print "XLSX to HTML updater, Version $VERSION";
-
+  print "Convert files from $master_dir to $output_dir";
   if( ! $execute ) {
     print "<div><span style='border: black 2px solid; padding: 2px 8px;'><a href='?execute=1'>Convert</a></span></div>";
   }
