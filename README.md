@@ -30,10 +30,13 @@
 
 
 1. 入力リポジトリの展開
+   /master_dir の親ディレクトリを /master_parent_dir とすると
    ~~~
-   cd /master_dir/
+   cd /master_patent_dir/
    git clone git@github.com:user/master_git.git
+   sudo chcon -R -t httpd_sys_content_t master_dir
    ~~~
+   オーナーやパーミッション・コンテクストは環境に合わせて設定してください。
 
 1. 出力ディレクトリの準備
    ~~~
