@@ -5,29 +5,52 @@
 - clone_dir : このスクリプトツリーを展開するディレクトリ
 - master_dir : マスター(入力)となるエクセルやテンプレート、画像などを置くディレクトリ
 - output_dir : 生成されたドキュメントツリーを公開するディレクトリ
+また、ソースツリーを用意します
+- master_git : master_dir に含まれるエクセルファイルや画像ファイルなど
 
 1. コアプログラムを clone
-   > cd /clone_dir/
-   > git clone git@github.com:tsuchim/fresta-text-conv.git
+   ~~~
+   cd /clone_dir/
+   git clone git@github.com:tsuchim/fresta-text-conv.git
+   ~~~
    または
-   > git clone https://github.com/tsuchim/fresta-text-conv.git
+   ~~~
+   git clone https://github.com/tsuchim/fresta-text-conv.git
+   ~~~
 
-1. サブモジュールをアップデート
-   > git submodule update
+1. サブモジュールをアップデートしコンパイル
+   ~~~
+   git submodule update
+   cd libs/Spreadsheet-XLSX/
+   make
+   cd -
+   ~~~
+   libs/Spreadsheet-XLSX/lib/Spreadsheet/XLSX.pm
+   が作られたことを確認してください。
+
 
 1. 入力リポジトリの展開
-   TBA
+   ~~~
+   cd /master_dir/
+   git clone master_git
+   ~~~
 
 1. 出力ディレクトリの準備
-   TBA
+   ~~~
+   mkdir /output_dir/
+   chmod 777 /output_dir/
+   ~~~
+   パーミッションなどは環境によります。わからない場合は管理者に聞いて下さい。
    
 1. 出力用CGIの準備
    変換をWeb上で行いたい場合には、出力ディレクトリにリンクを貼り、実行権限を設定します。
    1. このままでは誰でも変換を実行出来てしまうので .htaccess にアクセス可能なIPアドレスを設定するか、認証の設定をします。
    2. リンクを貼り、必要に応じてパーミッションやコンテクストを指定します。
-      > ln -s /clone_dir/xlsx2html.pl convert.cgi
-      > chmod 755 /clone_dir/xlsx2html.pl
-      > chcon -t httpd_sys_script_exec_t convert.cgi
+      ~~~
+      ln -s /clone_dir/xlsx2html.pl convert.cgi
+      chmod 755 /clone_dir/xlsx2html.pl
+      chcon -t httpd_sys_script_exec_t convert.cgi
+      ~~~
 
 # Excel format
 - 入力エクセルファイルは、マスターディレクトリに配置します。
