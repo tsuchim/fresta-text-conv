@@ -72,7 +72,7 @@
       cd /output_dir/
       ln -s /clone_dir/xlsx2html.pl convert.cgi
       chmod 755 /clone_dir/xlsx2html.pl
-      chcon -t httpd_sys_script_exec_t convert.cgi
+      sudo chcon -t httpd_sys_script_exec_t convert.cgi
       ~~~
 
 # Excel format
