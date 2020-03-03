@@ -90,7 +90,7 @@
   使用するテンプレートファイル名はエクセルファイルの中で指定しますが、
   省略すると、同じ basename に .tmpl をつけたファイルがテンプレートとして採用されます。
 
-- <a href="doc/excel_sc_1.png"><img src="doc/excel_sc_1.png" alt="エクセルファイル見本" align="right"></a>
+- <a style="display:block;" href="doc/excel_sc_1.png"><img src="doc/excel_sc_1.png" alt="エクセルファイル見本" align="center"></a>
   エクセルファイルは、1つのドキュメントツリーにつき1つのファイルを用意します。
 
 - 複数のページを出力する場合は、対応した数のシートを準備します。
