@@ -52,16 +52,16 @@
       
       ### .htaccess
       ~~~
-      SetEnv MASTER_DIR /var/www/fresta-text-conv/data/xlsx/fresta
+      SetEnv MASTER_DIR /master_dir
       
-      <FilesMatch \\.cgi$>
+      <FilesMatch \.cgi$>
         Sethandler cgi-script
       
         order deny,allow
         deny from all
         allow from 192.168.11.22/32
       </FilesMatch>
-      <FilesMatch ^\\.>
+      <FilesMatch ^\.>
         order deny,allow
         deny from all
       </FilesMatch>
