@@ -12,11 +12,7 @@
 
 1. コアプログラムを clone
    ~~~
-   cd /clone_dir/
-   git clone git@github.com:tsuchim/fresta-text-conv.git
-   ~~~
-   または
-   ~~~
+   cd /clone_parent_dir/
    git clone https://github.com/tsuchim/fresta-text-conv.git
    ~~~
 
