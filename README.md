@@ -21,7 +21,7 @@
 
 1. サブモジュールをアップデートしコンパイル
    ~~~
-   git submodule update
+   git submodule update -i
    cd libs/Spreadsheet-XLSX/
    make
    cd -
