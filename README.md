@@ -6,7 +6,8 @@
 - master_dir : マスター(入力)となるエクセルやテンプレート、画像などを置くディレクトリ
 - output_dir : 生成されたドキュメントツリーを公開するディレクトリ
 
-また、ソースツリーを用意します
+
+また、ソースツリーを用意します。git で管理することを前提にしています。
 - git@github.com:user/master_git.git : master_dir に含まれるエクセルファイルや画像ファイルなど
 
 1. コアプログラムを clone
@@ -80,6 +81,9 @@
       chmod 755 /clone_dir/xlsx2html.pl
       sudo chcon -t httpd_sys_script_exec_t convert.cgi
       ~~~
+
+   1. この状態で、convert.cgi にアクセスすると、ファイルの一覧が表示されます。
+      「Convert」をクリックすると、変換が行われます。
 
 # Excel format
 - 入力エクセルファイルは、マスターディレクトリに配置します。
