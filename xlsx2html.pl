@@ -1,4 +1,4 @@
-#!/usr/bin/perl -l ../../libs/Spreadsheet-XLSX/lib/
+#!/usr/bin/perl
 
 # use lib '../../libs/Spreadsheet-XLSX/lib/';
 use FindBin;
