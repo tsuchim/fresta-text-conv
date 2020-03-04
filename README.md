@@ -24,9 +24,14 @@
    ~~~
    git submodule update -i
    cd libs/Spreadsheet-XLSX/
+   perl Makefile.PL
    make
+   make test
    cd -
    ~~~
+   make test の後、最後に
+   > Result: PASS
+   で終わっていることを確認した後、
    > libs/Spreadsheet-XLSX/lib/Spreadsheet/XLSX.pm
    が作られたことを確認してください。
 
