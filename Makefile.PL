@@ -4,7 +4,7 @@ use ExtUtils::MakeMaker;
 # the contents of the Makefile that is written.
 WriteMakefile(
     NAME              => 'fresta-text-conv',
-    VERSION_FROM      => 'xls2html.pl'; #'lib/FrestaTextConv/XLSX.pm', # finds $VERSION
+    VERSION_FROM      => 'xls2html.pl', #'lib/FrestaTextConv/XLSX.pm', # finds $VERSION
     PREREQ_PM         => {
 	    'Archive::Zip' => '1.18',
 	    'Spreadsheet::ParseExcel' => '0.59',
