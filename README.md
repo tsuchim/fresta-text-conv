@@ -140,3 +140,4 @@
 
     strong 等のタグはそのまま認識されます。
 
+このライブラリは、Artistic License または GNU General Public License にて公開されます
